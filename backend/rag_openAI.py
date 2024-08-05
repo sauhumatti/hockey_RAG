@@ -21,6 +21,9 @@ from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from typing import Dict, Any, List
 
+# Load environment variables from a .env file if it exists
+load_dotenv()
+
 # Ensure you have set the OPENAI_API_KEY environment variable
 api_key = os.environ.get('OPENAI_API_KEY')
 if not api_key:
@@ -32,11 +35,13 @@ openai.api_key = api_key
 # Initialize the OpenAI client with your API key
 client = OpenAI(api_key=api_key)
 
+
 # Database connection parameters
 db_params = {
     "dbname": os.environ.get("DB_NAME", "hockey_stats"),
     "user": os.environ.get("DB_USER", "sauhumatti"),
-    "host": os.environ.get("DB_HOST", "localhost")
+    "host": os.environ.get("DB_HOST", "localhost"),
+    "password": os.environ.get("DB_PASSWORD", "")
 }
 
 # Chat memory implementation
