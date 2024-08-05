@@ -1,7 +1,12 @@
+import sys
+import os
+
+# Add the backend directory to the Python path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from rag_openAI import process_query
-import os
 
 app = Flask(__name__, static_folder='../frontend/build')
 CORS(app)
