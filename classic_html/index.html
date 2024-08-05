@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hockey AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="hockeyAI.png" alt="Hockey AI Logo" class="logo">
+            <div class="info-container">
+                <button id="info-button" aria-label="Information">i</button>
+                <div id="info-text" class="info-text">
+                    <h3>Welcome to Hockey AI</h3>
+                    <p>Your intelligent assistant for NHL statistics and insights, analyzing data from 2008 to 2024.</p>
+                    <h4>How it works:</h4>
+                    <ol>
+                        <li>You ask a question about NHL stats, players, teams, or historical records.</li>
+                        <li>Our AI processes your query and generates an appropriate SQL query.</li>
+                        <li>The system retrieves relevant data from our comprehensive NHL database.</li>
+                        <li>The AI analyzes the retrieved data and formulates a human-readable response.</li>
+                        <li>You receive a detailed answer with key statistics and insights.</li>
+                    </ol>
+                    <p>Whether you're curious about player performances, team statistics, or league trends, Hockey AI is here to assist you with accurate, data-driven answers.</p>
+                </div>
+            </div>
+        </header>
+        <div class="chat-container">
+            <div id="chat-history">
+                <!-- Chat messages will be added here dynamically -->
+            </div>
+            <div id="typing-indicator" class="typing-indicator">
+                <span>Analyzing query...</span>
+            </div>
+            <div class="input-container">
+                <input type="text" id="query-input" placeholder="Ask about NHL stats, players, or teams...">
+                <button id="submit-query">Ask</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
