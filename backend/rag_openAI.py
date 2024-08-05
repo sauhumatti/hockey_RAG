@@ -7,7 +7,6 @@ import requests
 import re
 import os
 import openai
-import pandas as pd
 import csv
 import psycopg2
 import re
