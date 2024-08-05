@@ -11,6 +11,7 @@ import csv
 import psycopg2
 import re
 
+from dotenv import load_dotenv
 from collections import deque
 from tabulate import tabulate
 from lookup_table import hockey_stats_schema
