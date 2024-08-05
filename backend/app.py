@@ -1,7 +1,8 @@
-import sys
+from dotenv import load_dotenv
 import os
 
-# Add the backend directory to the Python path
+load_dotenv()
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask, request, jsonify, send_from_directory
