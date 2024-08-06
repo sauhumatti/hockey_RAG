@@ -51,13 +51,13 @@ def handle_query():
 @app.route('/<path:path>')
 def serve(path):
     print(f"Serving path: {path}")
-    full_path = os.path.join(app.static_folder, path)
-    print(f"Full path: {full_path}")
-    if path != "" and os.path.exists(full_path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
         print(f"Serving static file: {path}")
         return send_from_directory(app.static_folder, path)
     else:
-        print(f"Serving index.html from: {app.static_folder}")
+        index_path = os.path.join(app.static_folder, 'index.html')
+        print(f"Checking for index.html at: {index_path}")
+        print(f"index.html exists: {os.path.exists(index_path)}")
         return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/health')
