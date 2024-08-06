@@ -1,17 +1,13 @@
-import json
+import sys
 import os
+import json
 import re
 import logging
-import json
 import requests
-import re
-import os
 import openai
 import csv
 import psycopg2
-import re
-import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from dotenv import load_dotenv
 from collections import deque
 from tabulate import tabulate
@@ -21,6 +17,8 @@ from openai import OpenAI
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from typing import Dict, Any, List
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Load environment variables from a .env file if it exists
 load_dotenv()
