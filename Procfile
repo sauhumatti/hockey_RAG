@@ -1,1 +1,1 @@
-web: npm run build && gunicorn backend.app:app
+web: npm run build && npm start
