@@ -4,11 +4,17 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
+print("Imported sys and os")
+
 # Add the current directory to the Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+print("Appended current directory to sys.path")
+
 # Now we can import from the current directory
 from rag_openAI import process_query
+
+print("Imported process_query from rag_openAI")
 
 load_dotenv()
 
@@ -42,6 +48,7 @@ def serve(path):
 @app.route('/api/health')
 def health_check():
     return jsonify({"status": "healthy"}), 200
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
