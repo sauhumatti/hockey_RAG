@@ -30,7 +30,7 @@ print(f"Python path: {sys.path}")
 static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../frontend/build'))
 print(f"Static folder path: {static_folder_path}")
 
-app = Flask(__name__, static_folder=static_folder_path, static_url_path='/')
+app = Flask(__name__, static_folder='frontend/build')
 CORS(app)
 
 print(f"Static folder set to: {app.static_folder}")
