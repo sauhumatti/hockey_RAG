@@ -26,13 +26,9 @@ print(f"Current working directory: {os.getcwd()}")
 print(f"Contents of current directory: {os.listdir('.')}")
 print(f"Python path: {sys.path}")
 
-# Get the absolute path to the frontend/build directory
-
 # Set the static folder path directly
 static_folder_path = '/app/frontend/build'
 app = Flask(__name__, static_folder=static_folder_path, static_url_path='/')
-
-app = Flask(__name__, static_folder='frontend/build')
 CORS(app)
 
 print(f"Static folder set to: {app.static_folder}")

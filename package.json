@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
       "start": "gunicorn backend.app:app",
-      "heroku-postbuild": "cd frontend && npm install && npm run build"
+      "heroku-postbuild": "echo 'Starting heroku-postbuild' && cd frontend && npm install && echo 'Frontend dependencies installed' && npm run build && echo 'Frontend build complete' && ls -R build"
     },
     "engines": {
       "node": "14.x",
