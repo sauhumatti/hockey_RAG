@@ -26,8 +26,15 @@ print(f"Current working directory: {os.getcwd()}")
 print(f"Contents of current directory: {os.listdir('.')}")
 print(f"Python path: {sys.path}")
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
+# Get the absolute path to the frontend/build directory
+static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../frontend/build'))
+print(f"Static folder path: {static_folder_path}")
+
+app = Flask(__name__, static_folder=static_folder_path, static_url_path='/')
 CORS(app)
+
+print(f"Static folder set to: {app.static_folder}")
+print(f"Static URL path set to: {app.static_url_path}")
 
 @app.route('/api/query', methods=['POST'])
 def handle_query():
@@ -44,11 +51,13 @@ def handle_query():
 @app.route('/<path:path>')
 def serve(path):
     print(f"Serving path: {path}")
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+    full_path = os.path.join(app.static_folder, path)
+    print(f"Full path: {full_path}")
+    if path != "" and os.path.exists(full_path):
         print(f"Serving static file: {path}")
         return send_from_directory(app.static_folder, path)
     else:
-        print("Serving index.html")
+        print(f"Serving index.html from: {app.static_folder}")
         return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/health')
