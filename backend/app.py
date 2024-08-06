@@ -10,11 +10,14 @@ print("Imported sys and os")
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 print("Appended current directory to sys.path")
+print(f"sys.path after append: {sys.path}")
 
 # Now we can import from the current directory
-from rag_openAI import process_query
-
-print("Imported process_query from rag_openAI")
+try:
+    from rag_openAI import process_query
+    print("Successfully imported process_query from rag_openAI")
+except ImportError as e:
+    print(f"Failed to import process_query from rag_openAI: {e}")
 
 load_dotenv()
 
@@ -40,15 +43,17 @@ def handle_query():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
+    print(f"Serving path: {path}")
     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        print(f"Serving static file: {path}")
         return send_from_directory(app.static_folder, path)
     else:
+        print("Serving index.html")
         return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/health')
 def health_check():
     return jsonify({"status": "healthy"}), 200
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
