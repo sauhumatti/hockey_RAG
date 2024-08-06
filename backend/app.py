@@ -1,18 +1,23 @@
 import os
+import sys
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from .rag_openAI import process_query
+from dotenv import load_dotenv
 
-# Add the backend directory to the Python path
-# (This line can be kept if you have imports from backend modules)
-import sys
+# Add the current directory to the Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from dotenv import load_dotenv
+# Now we can import from the current directory
+from rag_openAI import process_query
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='../frontend/build')
+# Debug prints
+print(f"Current working directory: {os.getcwd()}")
+print(f"Contents of current directory: {os.listdir('.')}")
+print(f"Python path: {sys.path}")
+
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app)
 
 @app.route('/api/query', methods=['POST'])
@@ -26,7 +31,6 @@ def handle_query():
         print(f"Error processing query: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-# Serve React App
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
@@ -34,6 +38,10 @@ def serve(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/api/health')
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
