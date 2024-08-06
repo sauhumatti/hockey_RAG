@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from rag_openAI import process_query
+from .rag_openAI import process_query
 
 # Add the backend directory to the Python path
 # (This line can be kept if you have imports from backend modules)
