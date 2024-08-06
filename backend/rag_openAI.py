@@ -14,8 +14,8 @@ import re
 from dotenv import load_dotenv
 from collections import deque
 from tabulate import tabulate
-from lookup_table import hockey_stats_schema
-from simplified_hockey_stats_schema import simplified_hockey_stats_schema
+from .lookup_table import hockey_stats_schema
+from .simplified_hockey_stats_schema import simplified_hockey_stats_schema
 from openai import OpenAI
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
