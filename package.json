@@ -1,0 +1,11 @@
+{
+    "name": "hockey-stats-app",
+    "version": "1.0.0",
+    "scripts": {
+      "build": "cd frontend && npm install && npm run build",
+      "start": "gunicorn backend.app:app"
+    },
+    "engines": {
+      "node": "14.x"
+    }
+  }
