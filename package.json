@@ -2,12 +2,10 @@
     "name": "hockey-stats-app",
     "version": "1.0.0",
     "scripts": {
-      "start": "gunicorn backend.app:app",
-      "heroku-postbuild": "echo 'Starting heroku-postbuild' && cd frontend && npm install && echo 'Frontend dependencies installed' && npm run build && echo 'Frontend build complete' && ls -R build"
+      "start": "gunicorn backend.app:app"
     },
     "engines": {
       "node": "14.x",
       "npm": "6.x"
-    },
-    "cacheDirectories": ["frontend/node_modules"]
+    }
   }
