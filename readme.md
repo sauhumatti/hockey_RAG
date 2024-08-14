@@ -113,7 +113,23 @@ hockey_RAG/
 
 # Database Setup
 
-This project uses a PostgreSQL database to store hockey statistics. The database dump is provided in the `database/hockey_stats.sql` file.
+This project uses a PostgreSQL database to store hockey statistics. The database dump is provided as a release asset on GitHub.
+
+## Downloading the Database Dump
+
+To set up the database, you'll need to download the `hockey_stats.sql` file from the Releases section of this repository.
+
+1. **Navigate to the Releases Section**:
+   - Go to the [Releases](../../releases) page of this repository.
+
+2. **Download the Database Dump**:
+   - Locate the latest release, titled something like "Initial Hockey Stats Database Dump."
+   - Click on the release title to expand the details.
+   - Download the `hockey_stats.sql` file listed under "Assets."
+
+3. **Save the File**:
+   - Save the downloaded file to a location on your local machine, such as the `database/` directory of the cloned repository.
+
 
 ## Prerequisites
 
