@@ -48,6 +48,7 @@ chat_history = deque(maxlen=3)
 
 logging.basicConfig(level=logging.DEBUG)
 
+# Generate a response using the OpenAI API based on given messages and parameters
 def generate_response(messages: List[Dict[str, str]], model: str = "gpt-4o-mini", max_tokens: int = 300) -> str:
     response = client.chat.completions.create(
         model=model,
@@ -56,12 +57,15 @@ def generate_response(messages: List[Dict[str, str]], model: str = "gpt-4o-mini"
     )
     return response.choices[0].message.content
 
+# Update the chat history with a new query-response pair
 def update_chat_history(query: str, response: str) -> None:
     chat_history.append({"query": query, "response": response})
 
+# Retrieve the current chat history
 def get_chat_history() -> deque:
     return chat_history
 
+# Determine if the current query requires context from previous conversation
 def query_requires_history(current_query: str) -> bool:
     logging.debug(f"Analyzing query for history requirement: '{current_query}'")
 
@@ -92,7 +96,7 @@ def query_requires_history(current_query: str) -> bool:
 
     return requires_history
 
-
+# Generate context from chat history if the query requires it
 def generate_context_from_history(query: str) -> str:
     if not query_requires_history(query):
         return ""
@@ -103,6 +107,7 @@ def generate_context_from_history(query: str) -> str:
 
     return context.strip()
 
+# Parse and expand the user query into a structured format
 def parse_and_expand_query(query: str) -> Dict[str, Any]:
     logging.debug(f"Entering parse_and_expand_query with query: {query}")
 
@@ -198,6 +203,7 @@ def parse_and_expand_query(query: str) -> Dict[str, Any]:
         logging.error(f"Raw response causing the error: {response}")
         return None
 
+# Generate a SQL query based on the analyzed data from the user's query
 def generate_sql_query(analyzed_data: Dict[str, Any]) -> str:
     system_content = """You are a SQL expert specialized in querying hockey statistics databases.
     Generate a PostgreSQL query based on the provided information. Follow these rules:
@@ -267,6 +273,7 @@ def generate_sql_query(analyzed_data: Dict[str, Any]) -> str:
 
     return sql_query
 
+# Execute and test the generated SQL query, attempting to correct it if it fails
 def test_sql_query(query: str, analyzed_data: Dict[str, Any]) -> Dict[str, Any]:
     def execute_query(cursor, query: str) -> Dict[str, Any]:
         cursor.execute(query)
@@ -313,6 +320,7 @@ def test_sql_query(query: str, analyzed_data: Dict[str, Any]) -> Dict[str, Any]:
             "error_message": f"Database connection error: {str(e)}"
         }
 
+# Attempt to correct a SQL query based on the error message and original requirements
 def correct_query(query: str, error_message: str, analyzed_data: Dict[str, Any]) -> str:
     system_content = """You are a SQL expert specialized in correcting and optimizing queries for hockey statistics databases.
     Your task is to analyze the given SQL query, the error message, and the original query requirements, then generate a corrected SQL query.
@@ -360,6 +368,7 @@ def correct_query(query: str, error_message: str, analyzed_data: Dict[str, Any])
 
     return corrected_query
 
+# Generate a natural language answer for non-hockey related queries
 def generate_natural_language_answer_non_hockey(original_query: str, expanded_query: str) -> str:
     system_content = """Answer to the user as normally but
     if the query is not about hockey, suggest to the user to ask something hockey statistics related.
@@ -383,6 +392,7 @@ def generate_natural_language_answer_non_hockey(original_query: str, expanded_qu
 
     return response
 
+# Generate a natural language answer for hockey queries that don't require specific data
 def generate_natural_language_answer_hockey_without_data(original_query: str, parsed_result: Dict[str, Any]) -> str:
     system_content = """You are an AI assistant and you know everything about the NHL.
     Provide the user with a general answer based on common hockey knowledge.
@@ -414,6 +424,7 @@ def generate_natural_language_answer_hockey_without_data(original_query: str, pa
 
     return response
 
+# Generate a natural language answer based on the query and retrieved data
 def generate_natural_language_answer_with_data(original_query: str, expanded_query: str, sql_query: str, query_result: List[Dict[str, Any]]) -> str:
     table = ""
     if query_result:
@@ -460,6 +471,7 @@ def generate_natural_language_answer_with_data(original_query: str, expanded_que
 
     return response
 
+# Generate an error response when data fetching fails
 def generate_error_response(query: str, expanded_query: str, error_message: str) -> str:
     system_content = """You are an AI assistant specialized in hockey statistics.
     An error occurred while trying to fetch specific data for the user's query.
@@ -487,6 +499,7 @@ def generate_error_response(query: str, expanded_query: str, error_message: str)
 
     return response
 
+# Handle non-hockey related queries
 def handle_non_hockey_query(query: str, result: Dict[str, Any]) -> Dict[str, Any]:
     logging.debug("Query is not related to hockey statistics. Skipping SQL query generation and testing.")
     nl_answer = generate_natural_language_answer_non_hockey(
@@ -497,6 +510,7 @@ def handle_non_hockey_query(query: str, result: Dict[str, Any]) -> Dict[str, Any
     logging.debug(nl_answer)
     return {"natural_language_answer": nl_answer, "hockey_related": False}
 
+# Handle hockey-related queries that don't require specific data
 def handle_hockey_query_without_data(query: str, result: Dict[str, Any]) -> Dict[str, Any]:
     logging.debug("Query is hockey-related but doesn't require specific table data. Generating general answer.")
     nl_answer = generate_natural_language_answer_hockey_without_data(
@@ -507,6 +521,7 @@ def handle_hockey_query_without_data(query: str, result: Dict[str, Any]) -> Dict
     logging.debug(nl_answer)
     return {"natural_language_answer": nl_answer, "hockey_related": True, "requires_data": False}
 
+# Handle hockey-related queries that require specific data
 def handle_hockey_query_with_data(query: str, result: Dict[str, Any]) -> Dict[str, Any]:
     sql_query = generate_sql_query(result)
     logging.debug("\nGenerated SQL Query:")
@@ -553,6 +568,7 @@ def handle_hockey_query_with_data(query: str, result: Dict[str, Any]) -> Dict[st
     logging.debug("\n" + "="*50)  # Separator between queries
     return response
 
+# Handle cases where query parsing and expansion fails
 def handle_failed_query() -> Dict[str, Any]:
     logging.debug("Failed to parse and expand query.")
     response = {
@@ -562,6 +578,7 @@ def handle_failed_query() -> Dict[str, Any]:
     logging.debug("\n" + "="*50)  # Separator between queries
     return response
 
+# Process a user query and return the appropriate response
 def process_query(query: str) -> Dict[str, Any]:
     logging.debug(f"\n--- Processing Query: {query} ---")
 
